@@ -1,0 +1,21 @@
+volumes:
+  accelerator-volume:
+    driver: "local"
+
+services:
+  accelerator:
+    image: unitytechnologies/accelerator
+    volumes:
+      - accelerator-volume:/agent
+    environment:
+      - USER=admin
+      - PASSWORD=admin
+      - DISABLE_USAGE_STATS=true
+    ports:
+      - "5678:10080"
+      - "80:80"
+      - "443:443"
+      - "10443:10443"
+    healthcheck:
+      test: /bin/bash -c "echo > /dev/tcp/127.0.0.1/80" || exit 1
+    restart: always
